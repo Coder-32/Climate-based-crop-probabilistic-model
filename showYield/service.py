@@ -12,7 +12,8 @@ from geopy.geocoders import Nominatim
 # ════════════════════════════════════════════════
 # 1. GLOBAL INITIALIZATION
 # ════════════════════════════════════════════════
-API_KEY = 'AIzaSyCu2IEGul8FywG9E1S9XYtXwJbv4eSNOJ4'
+# Replace the placeholder below with your own API key or load it from environment variables.
+API_KEY = 'your-api-key-here'
 PKL_PATH = os.path.join(os.path.dirname(__file__), 'wheat_integrated_v2.pkl')
 
 # --- FOLDER SETUP ---
