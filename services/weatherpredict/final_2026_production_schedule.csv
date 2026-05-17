@@ -1,0 +1,26 @@
+Date,Activity,Requirements
+2026-06-07,CRITICAL: Start Seedbed_Prep,Minerals: 0.0kg Urea | Water: 0.0cm
+2026-07-01,CRITICAL: Start Transplanting,Minerals: 1.0kg Urea | Water: 3.5cm
+2026-07-03,FERTILIZER: Second Dose,Apply remaining Nitrogen/Urea
+2026-07-05,MAINTENANCE: Irrigation Check,Maintain 3.5cm depth
+2026-08-01,CRITICAL: Start Tillering,Minerals: 0.0kg Urea | Water: 5.0cm
+2026-08-05,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-09,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-13,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-17,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-21,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-25,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-08-29,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-09-02,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-09-06,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-09-10,MAINTENANCE: Irrigation Check,Maintain 5.0cm depth
+2026-09-30,CRITICAL: Start Panicle_Init,Minerals: 0.5kg Urea | Water: 7.0cm
+2026-10-04,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-08,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-12,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-15,FERTILIZER: Second Dose,Apply remaining Nitrogen/Urea
+2026-10-16,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-20,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-24,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-10-28,MAINTENANCE: Irrigation Check,Maintain 7.0cm depth
+2026-11-08,CRITICAL: Start Ripening_Harvest,Minerals: 0.0kg Urea | Water: 0.0cm

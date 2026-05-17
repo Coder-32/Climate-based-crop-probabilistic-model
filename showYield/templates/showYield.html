@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Intelligence | AI Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* Essential layout for the prediction results */
+        .prediction-container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
+        .card:hover { transform: translateY(-5px); }
+        .full-width { grid-column: span 2; }
+        
+        .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .step-card { border-top: 4px solid #4caf50; background: #f9f9f9; padding: 15px; border-radius: 8px; position: relative; }
+        .risk-badge { float: right; background: #ffebee; color: #c62828; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        
+        .input-section { background: #2d452b; color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        input { padding: 12px; border-radius: 8px; border: none; margin: 5px; width: 250px; font-size: 16px; }
+        
+        .btn-predict { background: #4caf50; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+        .btn-predict:hover { background: #45a049; }
+        .btn-predict:disabled { background: #888; cursor: not-allowed; }
+
+        /* Loading Spinner */
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4caf50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body style="background-color: #f4efe6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+<div class="prediction-container">
+    
+    <div class="input-section">
+        <h2 style="margin-top: 0;">New Yield Forecast</h2>
+        <p style="opacity: 0.8; margin-bottom: 20px;">Utilizing NGBoost & Gemini AI for precise agricultural risk assessment</p>
+        
+        <form id="predictionForm">
+            <input type="text" id="cropInput" name="crop" placeholder="Crop Name (e.g. Wheat)" required>
+            <input type="text" id="locationInput" name="location" placeholder="Location (e.g. Nagpur)" required>
+            <button type="submit" class="btn-predict" id="submitBtn">Analyze Risk</button>
+        </form>
+
+        <div id="loader" class="loader"></div>
+        <p id="loadingText" style="display:none; margin-top: 10px;">Consulting satellite data and AI models...</p>
+    </div>
+
+    <div id="resultWrapper" style="display: none;">
+        <div class="grid-layout" id="dynamicContent">
+            </div>
+    </div>
+
+    <div id="initialMessage" style="text-align: center; color: #6b726a; margin-top: 50px;">
+        <p>Enter crop and location details above to generate your AI risk analysis.</p>
+    </div>
+
+</div>
+
+<script>
+    const initialCrop = {{ crop | default('')|tojson }};
+    const initialLocation = {{ location|default('')|tojson }};
+    const cropInput = document.getElementById('cropInput');
+    const locationInput = document.getElementById('locationInput');
+
+    if (initialCrop) {
+        cropInput.value = initialCrop;
+    }
+    if (initialLocation) {
+        locationInput.value = initialLocation;
+    }
+
+    document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Stop page from refreshing
+
+        // 1. Get Elements
+        const submitBtn = document.getElementById('submitBtn');
+        const loader = document.getElementById('loader');
+        const loadingText = document.getElementById('loadingText');
+        const resultWrapper = document.getElementById('resultWrapper');
+        const contentArea = document.getElementById('dynamicContent');
+        const initialMessage = document.getElementById('initialMessage');
+
+        // 2. Get Input Values
+        const crop = document.getElementById('cropInput').value;
+        const location = document.getElementById('locationInput').value;
+
+        // 3. Update UI to Loading State
+        submitBtn.disabled = true;
+        loader.style.display = 'block';
+        loadingText.style.display = 'block';
+        initialMessage.style.display = 'none';
+        resultWrapper.style.display = 'none';
+
+        try {
+            // 4. Call the Python Flask API
+            // We use POST as defined in your @prediction_bp.route
+            const response = await fetch(`/getprediction?crop=${encodeURIComponent(crop)}&location=${encodeURIComponent(location)}`, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                // 5. Success: Construct the dynamic HTML
+                contentArea.innerHTML = `
+                    <div class="card fade-in">
+                        <h2 style="color: #2d452b;">Yield Summary</h2>
+                        <p><strong>Location:</strong> ${data.location.address}</p>
+                        <p><strong>Expected Yield:</strong> <span style="color: #4caf50; font-size: 1.5em; font-weight: bold;">${data.prediction.expected_yield} T/Ha</span></p>
+                        <p><strong>Uncertainty (σ):</strong> ${data.prediction.uncertainty_score}</p>
+                        <p style="font-size: 0.85em; color: #666;">Generated via NGBoost Probabilistic Regression</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h2 style="color: #2d452b;">Probability Analysis</h2>
+                        <img src="/${data.prediction.graph_path}?t=${new Date().getTime()}" 
+                             alt="Yield Distribution Graph" style="width: 100%; border-radius: 8px;">
+                    </div>
+
+                    <div class="card full-width fade-in" style="margin-top: 10px;">
+                        <h2 style="color: #2d452b;">3-Step AI Roadmap</h2>
+                        <div class="roadmap-grid">
+                            ${data.roadmap.map(step => `
+                                <div class="step-card">
+                                    <span class="risk-badge">Risk: ${step.risk}%</span>
+                                    <h4 style="margin: 0; color: #2d452b; letter-spacing: 1px;">${step.stage.toUpperCase()}</h4>
+                                    <p style="font-size: 14px; color: #444; line-height: 1.5;">${step.text}</p>
+                                    <p style="font-weight: bold; font-size: 13px; color: #2d452b; margin-top: 10px;">
+                                        Est. Investment: ${step.cost}
+                                    </p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="text-align: right; margin-top: 20px;">
+                            <button type="button" onclick="downloadAndSyncCalendar('${crop}','${location}')" 
+                               style="background: #4caf50; color: white; padding: 12px 30px; border-radius: 8px; border:none; text-decoration: none; font-weight: bold; cursor:pointer; display: inline-block;">
+                               Download Calendar PDF & Sync
+                            </button>
+                        </div>
+                    </div>
+                `;
+                resultWrapper.style.display = 'block';
+            } else {
+                // 6. API Error Handing
+                contentArea.innerHTML = `
+                    <div class="card full-width" style="border-left: 5px solid #f44336; background: #fff5f5;">
+                        <h2 style="color: #f44336;">Analysis Failed</h2>
+                        <p>${data.message}</p>
+                        <button onclick="location.reload()" style="background:#f44336; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">Try Again</button>
+                    </div>
+                `;
+                resultWrapper.style.display = 'block';
+            }
+
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            alert("Connection error. Ensure your Flask server is running.");
+        } finally {
+            // 7. Reset UI state
+            submitBtn.disabled = false;
+            loader.style.display = 'none';
+            loadingText.style.display = 'none';
+        }
+    });
+
+    async function downloadAndSyncCalendar(crop, location) {
+        try {
+            const pdfResponse = await fetch(`/calendar/download_pdf?crop=${encodeURIComponent(crop)}&location=${encodeURIComponent(location)}`);
+            if (!pdfResponse.ok) {
+                throw new Error('PDF generation failed');
+            }
+
+            const blob = await pdfResponse.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = downloadUrl;
+            anchor.download = `${crop || 'agri'}-calendar.pdf`;
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // After download begins, redirect to calendar sync via Google Calendar
+            window.location.href = `/calendar/create_events?crop=${encodeURIComponent(crop)}&location=${encodeURIComponent(location)}`;
+        } catch (error) {
+            console.error(error);
+            alert('Unable to download calendar PDF. Please try again.');
+        }
+    }
+
+    if (initialCrop) {
+        document.getElementById('predictionForm').dispatchEvent(new Event('submit'));
+    }
+</script>
+
+</body>
+</html>

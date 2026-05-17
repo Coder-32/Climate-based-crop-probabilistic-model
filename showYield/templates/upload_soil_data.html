@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Soil Data - AgriLab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Soil Minerals Research Data</h1>
+        <p>As a researcher, upload your CSV file containing soil mineral data for specific locations.</p>
+        <p>The CSV should have columns: <strong>location</strong>, <strong>mineral</strong>, <strong>concentration</strong>.</p>
+        <p>Deviated or miscellaneous inputs will be automatically discarded.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Select CSV File:</label>
+                <input type="file" name="file" id="file" accept=".csv" required>
+            </div>
+            <button type="submit" class="btn">Upload</button>
+        </form>
+        <a href="{{ url_for('home.home') }}" class="btn-secondary">Back to Home</a>
+    </div>
+</body>
+</html>

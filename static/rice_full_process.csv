@@ -1,0 +1,6 @@
+Stage,Ideal_Month,Temp_Target_C,Humid_Target_Pct,Rain_Slope_Trend,Water_Depth_cm,Urea_kg,DAP_kg,MOP_kg,Duration_Days
+Seedbed_Prep,June,30,80,Positive,0.0,0.0,0.0,0.0,25
+Transplanting,July,28,85,Positive,3.5,1.0,0.5,0.0,5
+Tillering,August,30,85,Stable,5.0,0.0,0.0,0.4,40
+Panicle_Init,September,25,80,Negative,7.0,0.5,0.0,0.2,30
+Ripening_Harvest,November,22,60,Negative,0.0,0.0,0.0,0.0,15

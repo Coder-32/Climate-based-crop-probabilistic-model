@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Farmers Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('dashboard.static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="farmer-badge">
+        <div class="farmer-info">
+          <div class="farmer-avatar">
+              <img id="user-avatar-display" src="{{ url_for('dashboard.static', filename='images/farmericon.png') }}" alt="Farmer Avatar">
+          </div>
+          <span class="farmer-greeting" id="greeting-display">Good Morning</span>
+          <span class="farmer-name" id="user-name-display">Loading...</span>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <div class="icon-btn chat-btn" title="Chat with AI Assistant" id="chat-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <div class="chat-tooltip">AI Assistant</div>
+          <div class="chat-indicator">●</div>
+        </div>
+        <div class="icon-btn" title="Notifications">
+          <span class="notif-dot"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-bar-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" placeholder="Search crops (e.g. rice, moong)..." id="search-input"/>
+      
+      <button id="mic-btn" style="background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.7); display:flex; align-items:center; padding:0; outline:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; transition: color 0.3s;">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="location-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+      </svg>
+      <span id="user-location-display">Loading location...</span>
+    </div>
+    {% if user_type == 'researcher' %}
+    <div class="researcher-link">
+      <a href="{{ url_for('showYield.upload_soil_data') }}" class="btn btn-primary">Upload Soil Data</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="body-scroll">
+
+    <div id="hero-slider-container">
+      
+      <div class="hero-slide active" id="slide-wheat">
+        <div class="hero-text-content">
+          <h1 class="hero-title">Smart Crop:<br>Wheat</h1>
+          <p class="hero-desc">Discover the best practices to grow your Soft White Winter Wheat in Field A. Our recommendation system helps you track soil, weather, and yield conditions.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="createCalendarEvents('wheat')">Get Started</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" onclick="prevCrop()">Prev ⬅</button>
+              <button class="btn btn-secondary" onclick="nextCrop()">Next ➔</button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-box">
+          <img src="{{ url_for('dashboard.static', filename='images/wheat.png') }}" alt="Wheat">
+        </div>
+      </div>
+
+      <div class="hero-slide" id="slide-rice">
+        <div class="hero-text-content">
+          <h1 class="hero-title">Smart Crop:<br>Rice</h1>
+          <p class="hero-desc">Monitor water levels and manage your Basmati Long Grain Rice in Field B. Ensure flooded conditions remain optimal for the current tillering stage.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="createCalendarEvents('rice')">Get Started</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" onclick="prevCrop()">Prev ⬅</button>
+              <button class="btn btn-secondary" onclick="nextCrop()">Next ➔</button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-box">
+          <img src="{{ url_for('dashboard.static', filename='images/rice.png') }}" alt="Rice">
+        </div>
+      </div>
+
+      <div class="hero-slide" id="slide-potato">
+        <div class="hero-text-content">
+          <h1 class="hero-title">Smart Crop:<br>Potato</h1>
+          <p class="hero-desc">Ensure proper irrigation and soil aeration for your Potato crops. Early detection helps prevent late blight and tuber rot.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="createCalendarEvents('potato')">Get Started</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" onclick="prevCrop()">Prev ⬅</button>
+              <button class="btn btn-secondary" onclick="nextCrop()">Next ➔</button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-box">
+          <img src="{{ url_for('dashboard.static', filename='images/potato.png') }}" alt="Potato">
+        </div>
+      </div>
+
+      <div class="hero-slide" id="slide-onion">
+        <div class="hero-text-content">
+          <h1 class="hero-title">Smart Crop:<br>Onion</h1>
+          <p class="hero-desc">Manage bulb formation and weed control for your Onion fields. Maintain proper spacing and monitor thrips infestation.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="createCalendarEvents('onion')">Get Started</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" onclick="prevCrop()">Prev ⬅</button>
+              <button class="btn btn-secondary" onclick="nextCrop()">Next ➔</button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-box">
+          <img src="{{ url_for('dashboard.static', filename='images/onion.png') }}" alt="Onion">
+        </div>
+      </div>
+
+      <div class="hero-slide" id="slide-moong">
+        <div class="hero-text-content">
+          <h1 class="hero-title">Smart Crop:<br>Moong</h1>
+          <p class="hero-desc">Track pod development and ensure adequate phosphorus for your Moong (Green Gram). Watch for yellow mosaic virus.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="createCalendarEvents('moong')">Get Started</button>
+            <div class="nav-buttons">
+              <button class="btn btn-secondary" onclick="prevCrop()">Prev ⬅</button>
+              <button class="btn btn-secondary" onclick="nextCrop()">Next ➔</button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-box">
+          <img src="{{ url_for('dashboard.static', filename='images/moong.png') }}" alt="Moong">
+        </div>
+      </div>
+
+    </div>
+
+    <span class="section-label">Field Conditions</span>
+
+    <div class="advisory">
+      <span class="advisory-icon">💡</span>
+      <div>
+        <div class="advisory-title">Today's Advisory</div>
+        <div class="advisory-text" id="advisory-text">Apply nitrogen fertilizer to Wheat (Field A) before evening. Rain expected in 36 hrs.</div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon ic-fert">🌿</div>
+        <div class="info-label">Fertilizer</div>
+        <div class="info-value" id="val-fert">NPK <span class="info-unit">needed</span></div>
+        <div class="info-trend trend-ok" id="trend-fert">⚠ Apply within 2 days</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon ic-temp">🌡️</div>
+        <div class="info-label">Temperature</div>
+        <div class="info-value" id="val-temp">18 <span class="info-unit">°C avg</span></div>
+        <div class="info-trend trend-ok" id="trend-temp">⚠ Slightly above optimal</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon ic-rain">🌧️</div>
+        <div class="info-label">Rain</div>
+        <div class="info-value" id="val-rain">36 <span class="info-unit">mm/36h</span></div>
+        <div class="info-trend trend-up" id="trend-rain">✓ Skip irrigation</div>
+      </div>
+
+      <div class="info-card wide">
+        <div class="info-icon ic-soil">🪱</div>
+        <div>
+          <div class="info-label">Soil Health</div>
+          <div class="info-value" id="val-soil">pH 6.5 <span class="info-unit">· Optimal</span></div>
+          <div class="info-trend trend-up" id="trend-soil">✓ Optimal conditions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wx-card">
+      <div class="wx-header">
+        <div class="wx-icon">🌥️</div>
+        <div>
+          <div class="wx-title">Partly Cloudy</div>
+          <div class="wx-sub">7-Day Outlook</div>
+        </div>
+      </div>
+      <div class="wx-stats">
+        <div class="wx-stat-item"><span class="wx-stat-label">Humidity</span><span class="wx-stat-val">74%</span></div>
+        <div class="wx-stat-item"><span class="wx-stat-label">Wind</span><span class="wx-stat-val">12 km/h</span></div>
+        <div class="wx-stat-item"><span class="wx-stat-label">UV Index</span><span class="wx-stat-val">Moderate</span></div>
+        <div class="wx-stat-item"><span class="wx-stat-label">Rain Prob.</span><span class="wx-stat-val">65%</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg> Home
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg> Fields
+    </div>
+    <div class="nav-center">
+      <div class="nav-center-btn">🌱</div>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </svg> Guide
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg> Profile
+    </div>
+  </div>
+
+  <!-- Chatbot Modal -->
+  <div id="chat-modal" class="chat-modal">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h3>Agricultural Assistant</h3>
+        <button id="close-chat" class="close-btn">&times;</button>
+      </div>
+      <div id="chat-messages" class="chat-messages">
+        <div class="message bot-message">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">Hello! I'm your agricultural assistant. How can I help you with farming today?</div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Ask me about crops, weather, farming tips..." />
+        <button id="send-chat" class="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+   <script src="{{ url_for('dashboard.static', filename='js/script.js') }}"></script>
+   <script>
+     // Set dynamic user name and location
+     document.getElementById('user-name-display').textContent = '{{ name|default("Farmer") }}';
+     document.getElementById('user-location-display').textContent = '{{ location|default("Kolkata") }}';
+   </script>
+</body>
+</html>
