@@ -28,5 +28,11 @@
     "name": "Dr. Rajan Sharma",
     "user_type": "researcher",
     "location": "IARI Research Center, Delhi"
+  },
+  "j": {
+    "password": "jtpk",
+    "name": "j",
+    "user_type": "farmer",
+    "location": "Sikkim, India"
   }
 }
