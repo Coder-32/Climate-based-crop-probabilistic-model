@@ -334,44 +334,36 @@ pip install -r requirements.txt
 
 ## ⚙️ Environment Configuration (`.env`)
 
-Create a `.env` file in the root directory of the project:
+A `.env` file has been pre-configured in the project root (also see `.env.example`).
 
 ```env
 # Flask Application Secret
-SECRET_KEY=your-secure-random-secret-key
+SECRET_KEY=agrilab-development-secret-key-2026
 
-# Google Gemini API Key (Required for Agronomist Roadmap & Chatbots)
+# Google Gemini API Key (Required for live AI Agronomist Roadmap & Agricultural Chatbots)
 GEMINI_API_KEY=your-gemini-api-key-here
 
-# Google OAuth2 Credentials (Required for Google Calendar Sync & Login)
-GOOGLE_CLIENT_ID=your-google-oauth-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
+# Optional: Google OAuth2 (Only needed if you explicitly wish to connect Google Cloud Calendar)
+# GOOGLE_CLIENT_ID=
+# GOOGLE_CLIENT_SECRET=
+# OAUTHLIB_INSECURE_TRANSPORT=1
 
-# OAuth Transport Configuration (Set to 1 for local HTTP development)
-OAUTHLIB_INSECURE_TRANSPORT=1
-
-# SMTP Email Configuration (Optional: Required for Password Reset Emails)
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USERNAME=your-email@gmail.com
-SMTP_PASSWORD=your-app-specific-password
-EMAIL_FROM=no-reply@agrilab.com
+# Optional: SMTP Email Server (Only needed if sending real password reset emails)
+# SMTP_SERVER=smtp.gmail.com
+# SMTP_PORT=587
+# SMTP_USERNAME=your-email@gmail.com
+# SMTP_PASSWORD=your-app-specific-password
+# EMAIL_FROM=no-reply@agrilab.com
 ```
 
-### Setting Up Google OAuth2:
-1. Navigate to the [Google Cloud Console](https://console.cloud.google.com/).
-2. Create a project and enable the **Google Calendar API**.
-3. Under **OAuth consent screen**, configure scopes for:
-   - `openid`
-   - `.../auth/userinfo.profile`
-   - `.../auth/userinfo.email`
-   - `.../auth/calendar.events`
-   - `.../auth/calendar.readonly`
-4. Under **Credentials**, create an **OAuth 2.0 Client ID** (Web application).
-5. Add Authorized Redirect URI:
-   ```text
-   http://localhost:5000/login/google/authorized
-   ```
+### Which API Key to Provide:
+- **`GEMINI_API_KEY` (Primary & Only Required Key)**:
+  - **Where to get it**: Obtain a free API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+  - **What it powers**: Live agronomist roadmaps (custom stage tasks, cost ₹ estimates, risk scores) on `/showYield`, the farmer dashboard conversational assistant on `/dashboard`, and the calendar advisory chat on `/calendar`.
+  - **Fallback behavior**: If no key is provided, the platform automatically provides calibrated agronomic recommendations and offline advisory without crashing.
+- **Google OAuth2 Credentials (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`)**:
+  - **Optional**: Standard authentication uses email and password (or one-click demo login). Google OAuth is no longer mandatory to run or test the app.
+  - Crop production schedules are generated locally, exportable as ReportLab PDF calendars, and viewable directly in the app.
 
 ---
 

@@ -1,0 +1,32 @@
+{
+  "farmer@example.com": {
+    "password": "Farmer123!",
+    "aliases": [
+      "farmer123",
+      "farmer"
+    ],
+    "name": "Farmer User",
+    "user_type": "farmer",
+    "location": "Kolkata, India"
+  },
+  "scientist@example.com": {
+    "password": "Scientist123!",
+    "aliases": [
+      "scientist123",
+      "scientist"
+    ],
+    "name": "Dr. Rajan Sharma",
+    "user_type": "researcher",
+    "location": "IARI Research Center, Delhi"
+  },
+  "researcher@example.com": {
+    "password": "Researcher123!",
+    "aliases": [
+      "researcher123",
+      "researcher"
+    ],
+    "name": "Dr. Rajan Sharma",
+    "user_type": "researcher",
+    "location": "IARI Research Center, Delhi"
+  }
+}

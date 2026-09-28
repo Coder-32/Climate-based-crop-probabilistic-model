@@ -283,15 +283,24 @@
     </div>
   </div>
 
-  <!-- LOGIN DIVIDER -->
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">Login</span>
-    <div class="divider-line"></div>
+  <!-- MODE TABS (Sign In / Sign Up) -->
+  <div class="role-toggle" style="margin-top: -6px;">
+    <button class="toggle-btn active" id="tab-signin" onclick="setAuthMode('signin')" type="button">Sign In</button>
+    <button class="toggle-btn" id="tab-signup" onclick="setAuthMode('signup')" type="button">Create Account</button>
   </div>
 
-  <!-- EMAIL + PASSWORD -->
+  <!-- EMAIL + PASSWORD AUTH -->
   <div class="email-login">
+    <!-- NAME (Sign Up only) -->
+    <div class="input-group" id="name-group" style="display: none;">
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <input class="input-field" id="name-field" type="text" placeholder="Full name" autocomplete="name"/>
+    </div>
+
+    <!-- EMAIL -->
     <div class="input-group">
       <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="4" width="20" height="16" rx="3"/>
@@ -300,6 +309,7 @@
       <input class="input-field" id="email-field" type="email" placeholder="Email address" autocomplete="email"/>
     </div>
 
+    <!-- PASSWORD -->
     <div class="input-group">
       <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="3"/>
@@ -314,32 +324,32 @@
       </button>
     </div>
 
-    <span class="forgot-link" onclick="openForgotModal()">Forgot password?</span>
-
-    <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign In</button>
-  </div>
-
-  <!-- OR DIVIDER -->
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">or</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <!-- GOOGLE -->
-  <button type="button" class="signin-btn" onclick="handleGoogleLogin()" style="width: 100%; border: none; background: none; padding: 0; cursor: pointer;">
-    <div class="g-icon">
-      <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    <!-- LOCATION (Sign Up only) -->
+    <div class="input-group" id="location-group" style="display: none;">
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <circle cx="12" cy="9" r="2.5"/>
       </svg>
+      <input class="input-field" id="custom-location-field" type="text" placeholder="Location / Region (e.g. Kolkata, Punjab)"/>
     </div>
-    Sign in with Google
-  </button>
 
-  <p class="signup-link">Don't have an account? <a onclick="alert('Sign up coming soon!')">Sign up</a></p>
+    <span class="forgot-link" id="forgot-link" onclick="openForgotModal()">Forgot password?</span>
+
+    <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">Sign In</button>
+
+    <!-- QUICK DEMO LOGINS -->
+    <div id="demo-box" style="margin-top: 4px; text-align: center;">
+      <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; color: inherit; display: block; margin-bottom: 6px;">Quick Fill Demo:</span>
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button type="button" onclick="fillDemo('farmer')" class="signin-btn" style="padding: 6px 12px; font-size: 11.5px; border-radius: 12px; width: auto;">🌾 Demo Farmer</button>
+        <button type="button" onclick="fillDemo('scientist')" class="signin-btn" style="padding: 6px 12px; font-size: 11.5px; border-radius: 12px; width: auto;">🔬 Demo Scientist</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="signup-link" id="auth-switch-text">
+    Don't have an account? <a onclick="setAuthMode('signup')">Create account</a>
+  </p>
 </div>
 
 <div class="modal-overlay" id="forgot-modal" aria-hidden="true">
@@ -443,10 +453,90 @@
       });
   }
 
+  let authMode = 'signin';
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    const isSignup = mode === 'signup';
+    document.getElementById('name-group').style.display = isSignup ? 'block' : 'none';
+    document.getElementById('location-group').style.display = isSignup ? 'block' : 'none';
+    document.getElementById('forgot-link').style.display = isSignup ? 'none' : 'block';
+    document.getElementById('demo-box').style.display = isSignup ? 'none' : 'block';
+    document.getElementById('tab-signin').classList.toggle('active', !isSignup);
+    document.getElementById('tab-signup').classList.toggle('active', isSignup);
+    document.getElementById('submit-btn').textContent = isSignup ? 'Create Account & Sign In' : 'Sign In';
+    document.getElementById('auth-switch-text').innerHTML = isSignup
+      ? 'Already have an account? <a onclick="setAuthMode(\'signin\')">Sign in</a>'
+      : 'Don\'t have an account? <a onclick="setAuthMode(\'signup\')">Create account</a>';
+  }
+
+  function fillDemo(role) {
+    setRole(role);
+    setAuthMode('signin');
+    if (role === 'farmer') {
+      document.getElementById('email-field').value = 'farmer@example.com';
+      document.getElementById('pw-field').value = 'Farmer123!';
+    } else {
+      document.getElementById('email-field').value = 'scientist@example.com';
+      document.getElementById('pw-field').value = 'Scientist123!';
+    }
+  }
+
+  function handleSubmit() {
+    if (authMode === 'signup') {
+      handleRegister();
+    } else {
+      handleLogin();
+    }
+  }
+
+  function handleRegister() {
+    const name     = document.getElementById('name-field').value.trim();
+    const email    = document.getElementById('email-field').value.trim();
+    const pw       = document.getElementById('pw-field').value;
+    const location = document.getElementById('custom-location-field').value.trim() || document.getElementById('location-value').textContent;
+    const btn      = document.getElementById('submit-btn');
+
+    if (!email || !pw) { alert('Please enter your email and password.'); return; }
+    if (pw.length < 4) { alert('Password should be at least 4 characters long.'); return; }
+
+    btn.textContent = 'Creating account…';
+    btn.disabled = true;
+
+    fetch('{{ url_for("auth.register") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password: pw,
+        location,
+        user_type: currentRole,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = data.redirect;
+        } else {
+          alert(data.error || 'Registration failed.');
+          btn.textContent = 'Create Account & Sign In';
+          btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        alert('Unable to register right now. Please try again.');
+        btn.textContent = 'Create Account & Sign In';
+        btn.disabled = false;
+      });
+  }
+
   function handleLogin() {
     const email = document.getElementById('email-field').value.trim();
     const pw    = document.getElementById('pw-field').value;
-    const btn   = document.getElementById('login-btn');
+    const btn   = document.getElementById('submit-btn');
     if (!email || !pw) { alert('Please enter your email and password.'); return; }
 
     btn.textContent = 'Signing in…';
@@ -478,28 +568,6 @@
         btn.textContent = 'Sign In';
         btn.disabled = false;
       });
-  }
-
-  function handleGoogleLogin() {
-    // First set the user type in the session
-    fetch(`/auth/set-user-type/${currentRole}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => {
-      if (response.ok) {
-        // Then redirect to Google OAuth
-        window.location.href = '{{ url_for("auth.google_login") }}';
-      } else {
-        alert('Error setting user type. Please try again.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Error setting user type. Please try again.');
-    });
   }
 
   spawnParticles();

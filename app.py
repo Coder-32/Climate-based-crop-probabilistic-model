@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from home.route import home_bp  
 from auth.route import auth_bp, google_bp
@@ -6,8 +8,10 @@ from dashboad.route import dashboard_bp
 from showYield.route import showYield_bp
 from navigation.route import navigation_bp
 
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Required for Flask-Dance sessions
+app.secret_key = os.getenv('SECRET_KEY', 'agrilab-development-secret-key-2026')
 app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(google_bp, url_prefix='/login')
